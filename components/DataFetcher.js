@@ -21,14 +21,15 @@ const DataFetcher = ({ transferCurrentWeather, transferHourlyForecast, transferD
             .then((response) => response.json())
             .then((json) => {
                 const responseList = []
-                let time, weather, minTemp, maxTemp;
+                let time, listElement  = {}
                 for(let i = 0; i <= (json.list).length-1; i++) {
                     time = (json.list[i].dt_txt).slice(11, 16)
                     if(time=="00:00") {
-                        weather    = json.list[i].weather[0].main
-                        minTemp    = Fancify.temp( kelvinToCelsius(json.list[i].main.temp_min) )
-                        maxTemp    = Fancify.temp( kelvinToCelsius(json.list[i].main.temp_max) )
-                        responseList.push([weather, minTemp, maxTemp])
+                        listElement = {}
+                        listElement.weather    = json.list[i].weather[0].description
+                        listElement.minTemp    = Fancify.temp( kelvinToCelsius(json.list[i].main.temp_min) )
+                        listElement.maxTemp    = Fancify.temp( kelvinToCelsius(json.list[i].main.temp_max) )
+                        responseList.push(listElement)
                     }
                 }
                 transferDailyForecat(responseList)
@@ -49,12 +50,13 @@ const DataFetcher = ({ transferCurrentWeather, transferHourlyForecast, transferD
             .then((response) => response.json())
             .then((json) => {
                 const responseList = []
-                let time, weather, temp;
+                let listElement = {}
                 for(let i = 0; i <= 3; i++) {
-                    time    = (json.list[i].dt_txt).slice(11, 16)
-                    weather = json.list[i].weather[0].main
-                    temp    = Fancify.temp( kelvinToCelsius(json.list[i].main.temp) )
-                    responseList.push([time, weather, temp])
+                    listElement = {}
+                    listElement.time    = (json.list[i].dt_txt).slice(11, 16)
+                    listElement.weather = json.list[i].weather[0].description
+                    listElement.temp    = Fancify.temp( kelvinToCelsius(json.list[i].main.temp) )
+                    responseList.push(listElement)
                 }
                 transferHourlyForecast(responseList)
             }).catch((e) => console.log(e))
@@ -70,9 +72,9 @@ const DataFetcher = ({ transferCurrentWeather, transferHourlyForecast, transferD
             .then((response) => response.json())
             .then((json) => {
                 const jsonResponse = [
-                    Fancify.temp(kelvinToCelsius(json.main.temp)),                             // temperature,
-                    Fancify.humid(json.main.humidity), Fancify.pressure(json.main.pressure),   // humidity, pressure
-                    Fancify.speed(json.wind.speed),    Fancify.deg(json.wind.deg)              // wind speed, wind degree
+                    Fancify.temp(kelvinToCelsius(json.main.temp)), json.weather[0].description,// temperature, weather conditions 0, 1
+                    Fancify.humid(json.main.humidity), Fancify.pressure(json.main.pressure),   // humidity, pressure              2, 3
+                    Fancify.speed(json.wind.speed),    Fancify.deg(json.wind.deg)              // wind speed, wind degree         4, 5
                 ]
                 transferCurrentWeather(jsonResponse)
             }).catch((e) => console.log(e))

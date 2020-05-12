@@ -1,22 +1,25 @@
 import React from 'react';
-import { View, Text, StyleSheet, ImageBackground } from 'react-native';
+import { View, Text, StyleSheet, ImageBackground, ScrollView } from 'react-native';
 import Header from './components/Header';
 import CurrentWeather from './components/CurrentWeather';
 
 const App = () => {
   return (
-      <View style={ styles.container }>
+      <ScrollView style={ styles.container }>
         <Header />
         <CurrentWeather />
-      </View>
+      </ScrollView>
   )
 }
 
 const styles = StyleSheet.create({
   container: {
     backgroundColor: '#4d70f2',
-    flex: 3,
-    padding: 20
+    flex: 1,
+    paddingTop: 20,
+    paddingRight: 20,
+    paddingBottom: 50,
+    paddingLeft: 20
   },
 })
 
