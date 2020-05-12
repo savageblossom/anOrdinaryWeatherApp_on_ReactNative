@@ -5,8 +5,11 @@ import CurrentWeather from './components/CurrentWeather';
 
 const App = () => {
   return (
-      <ScrollView style={ styles.container }>
-        <Header />
+      <ScrollView>
+        <View style={ styles.container }>
+          <Header />
+        </View>
+        
         <CurrentWeather />
       </ScrollView>
   )

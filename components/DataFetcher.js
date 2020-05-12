@@ -26,6 +26,7 @@ const DataFetcher = ({ transferCurrentWeather, transferHourlyForecast, transferD
                     time = (json.list[i].dt_txt).slice(11, 16)
                     if(time=="00:00") {
                         listElement = {}
+                        listElement.date       = (json.list[i].dt_txt).slice(0, 10)
                         listElement.weather    = json.list[i].weather[0].description
                         listElement.minTemp    = Fancify.temp( kelvinToCelsius(json.list[i].main.temp_min) )
                         listElement.maxTemp    = Fancify.temp( kelvinToCelsius(json.list[i].main.temp_max) )
