@@ -1,47 +1,50 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, StyleSheet, Button } from 'react-native';
+import { View, Text, StyleSheet, TextInput, Button } from 'react-native';
+import DataFetcher from './DataFetcher';
 
 const CurrentWeather = () => {
-    let [isLoading, setLoading] = useState(true),
-        [Temp, setTemp]         = useState(null),
-        [City, setCity]         = useState(null)
+    let [City, setCity]                             = useState('Kyiv'),
+        [cityInput, setCityInput]                   = useState('Simferopol'),
+        // below states are from DataFetcher component
+        [CurrentWeather, setCurrentWeather]         = useState(''),
+        [DailyForecat,   setDailyForecat]           = useState(''),
+        [HourlyForecast, setHourlyForecast]         = useState('')
 
     useEffect(() => {
-        fetch('http://api.openweathermap.org/data/2.5/weather?q=Simferopol&appid=499bd0871b9c479cd64981e4b4a8f249')
-            .then((response) => response.json())
-            .then((json) => {
+        changeCity()
+    }, [City])
 
-                const temp = Math.round(json.main.temp - 273.15)
-                const responseTemp = temp > 0 ? '+' + temp + '°' : temp + '°'
+    const transferCurrentWeather    = childData => setCurrentWeather(childData)
+    const transferDailyForecat      = childData => setDailyForecat(childData)
+    const transferHourlyForecast    = childData => setHourlyForecast(childData)
 
-
-                const responseCity = json.name
-                setLoading(false);
-                setTemp(responseTemp)
-                setCity(responseCity)
-            })
-    })
-
-    const renderData = data => {
-        return (
-            data
-        )
-    }
+    const changeCity = () => setCity(cityInput)
 
     return (
         <View style={{ paddingTop: 30 }}>
-            <Text style={styles.city}>
-                { isLoading ? "Loading" : renderData(City) }
-            </Text>
-            <Text style={styles.temp}>
-                { isLoading ? "Loading" : renderData(Temp) }
-            </Text>
-            
-            <Text> 
-                {} 
-            </Text>
+            <DataFetcher 
+                        currentCity = { City }
+                        transferCurrentWeather  = { transferCurrentWeather }
+                        transferDailyForecat    = { transferDailyForecat   }
+                        transferHourlyForecast  = { transferHourlyForecast }
+                    />
+            <View>
+                <Text style={styles.city}>
+                    { City }
+                </Text>
+                <Text style={styles.temp}>
+                { CurrentWeather[0] }
+                </Text>
+            </View>
+            <TextInput
+                style={{ height: 40, borderColor: 'gray', borderWidth: 1, marginTop: 45 }}
+                placeholder="Type your city"
+                onChangeText={cityInput => setCityInput(cityInput)}
+                defaultValue={cityInput}
+            />
             <Button
-                title="Click!"
+                onPress={ () => { changeCity() } }
+                title="change city"
                 color="#841584"
                 accessibilityLabel="Learn more about this purple button"
             />
